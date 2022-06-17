@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<context:component-scan base-package="com.yyh.web.view"></context:component-scan>
+	
+
+		
+		
+		
+	<!-- 컨트롤러 등록 -->
+	<!-- Spring에서 제공하는 HandlerMapping 클래스 -->
+	<!-- 
+	<bean id="" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/login.do">login</prop>
+				<prop key="/boardList.do">boardList</prop>
+				<prop key="/boardContent.do">boardContent</prop>
+				<prop key="/boardWrite.do">boardWrite</prop>
+				<prop key="/boardUpdate.do">boardUpdate</prop>
+				<prop key="/boardDelete.do">boardDelete</prop>
+			</props>
+		
+		</property>
+	</bean>
+		 -->
+		
+	<!-- Controller -->
+	
+	<!-- <bean id="login" class="com.yyh.web.view.member.LoginController"></bean>
+	<bean id="logout" class="com.yyh.web.view.member.LogoutController"></bean>
+	<bean id="boardList" class="com.yyh.web.view.board.BoardListController"></bean>
+	<bean id="boardContent" class="com.yyh.web.view.board.BoardContentController"></bean>
+	<bean id="boardWrite" class="com.yyh.web.view.board.BoardWriteContoller"></bean>
+	<bean id="boardUpdate" class="com.yyh.web.view.board.BoardUpdateContoller"></bean>
+	<bean id="boardDelete" class="com.yyh.web.view.board.BoardDeleteController"></bean>
+	 -->
+	<!-- Spring 에서 제공하는 View Resolver 클래스 사용-->
+	<!-- 
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">	
+		<property name="prefix" value="/WEB-INF/views/board/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	 -->
+	
+	
+	
+</beans>
