@@ -11,11 +11,11 @@ import com.yyh.web.board.BoardDTO;
 import com.yyh.web.common.JDBCUtil;
 import com.yyh.web.member.MemberDTO;
 
-@Repository("memberDAO")
+//@Repository("memberDAO")
 public class MemberDAO {
 
-	private final String MEMBER_INSERT = "insert into member values( ?, ?, ?, ?)";
-	private final String MEMBER_UPDATE = "update member set name = ?, role = ? where id = ? and password = ?";
+	private final String MEMBER_INSERT = "insert into member values( ?, ?, ?)";
+	private final String MEMBER_UPDATE = "update member set name = ?, where id = ? and password = ?";
 	private final String MEMBER_DELETE = "delete member where id = ? and password = ?";
 	private final String MEMBER_GET = "select * from member where id = ?";
 	
@@ -32,7 +32,6 @@ public class MemberDAO {
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getPassword());
 			pstmt.setString(3, dto.getName());
-			pstmt.setString(4, dto.getRole());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,9 +46,8 @@ public class MemberDAO {
 			conn = JDBCUtil.getConnection();
 			pstmt = conn.prepareStatement(MEMBER_UPDATE);
 			pstmt.setString(1, dto.getName());
-			pstmt.setString(2, dto.getRole());
-			pstmt.setString(3, dto.getId());
-			pstmt.setString(4, dto.getPassword());
+			pstmt.setString(2, dto.getId());
+			pstmt.setString(3, dto.getPassword());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,7 +98,6 @@ public class MemberDAO {
 				dto.setId(rs.getString("id"));
 				dto.setPassword(rs.getString("password"));
 				dto.setName(rs.getString("name"));
-				dto.setRole(rs.getString("role"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -14,12 +14,12 @@ import com.yyh.web.board.BoardDTO;
 import com.yyh.web.common.JDBCUtil;
 import com.yyh.web.member.MemberDTO;
 
-
-//@Repository("memberDAO")
+@Repository("memberDAO")
 public class MemberDAOSpring2 {
 
-	private final String MEMBER_INSERT = "insert into member values( ?, ?, ?, ?)";
-	private final String MEMBER_UPDATE = "update member set name = ?, role = ? where id = ? and password = ?";
+	private final String MEMBER_INSERT = "insert into member(id, password, name, email, tel, addrNum, addr1, addr2) "
+			+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String MEMBER_UPDATE = "update member set name = ?, where id = ? and password = ?";
 	private final String MEMBER_DELETE = "delete member where id = ? and password = ?";
 	private final String MEMBER_GET = "select * from member where id = ?";
 	private final String MEMBER_LOGIN = "select count(*) from member where id = ? and password = ?";
@@ -29,12 +29,12 @@ public class MemberDAOSpring2 {
 	
 	public void insertMember(MemberDTO dto){		
 		System.out.println("=>Spring JDBC2로 실행");
-		this.jdbcTemplate.update(MEMBER_INSERT, dto.getId(), dto.getPassword(), dto.getName(), dto.getRole());
+		this.jdbcTemplate.update(MEMBER_INSERT, dto.getId(), dto.getPassword(), dto.getName(), dto.getEmail(), dto.getTel(), dto.getAddrNum(), dto.getAddr1(), dto.getAddr2());
 	}
 	
 	public void updateMember(MemberDTO dto){		
 		System.out.println("=>Spring JDBC2로 실행");
-		this.jdbcTemplate.update(MEMBER_UPDATE, dto.getName(), dto.getRole(), dto.getId(), dto.getPassword());
+		this.jdbcTemplate.update(MEMBER_UPDATE, dto.getName(), dto.getId(), dto.getPassword());
 	}
 
 	public int login(MemberDTO dto){
@@ -56,7 +56,11 @@ public class MemberDAOSpring2 {
 			dto.setId(rs.getString("id"));
 			dto.setPassword(rs.getString("password"));
 			dto.setName(rs.getString("name"));
-			dto.setRole(rs.getString("role"));
+			dto.setEmail(rs.getString("email"));
+			dto.setTel(rs.getString("tel"));
+			dto.setAddrNum(rs.getString("addrNum"));
+			dto.setAddr1(rs.getString("addr1"));
+			dto.setAddr2(rs.getString("addr2"));
 			return dto;
 		}
 	}

@@ -2,6 +2,8 @@ package com.yyh.web.board;
 
 import java.sql.Timestamp;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 @Data
 public class BoardDTO {
@@ -15,6 +17,11 @@ public class BoardDTO {
 	private int re_step;
 	private int re_level;
 
+	//검색용
 	private String search_condition;
 	private String search_keyword;
+	
+	//파일 업로드용
+	private MultipartFile uploadFile;
+	private String uploadFileName;
 }

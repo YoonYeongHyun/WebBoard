@@ -1,5 +1,7 @@
 package com.yyh.web.view.board;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +13,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yyh.web.board.BoardDTO;
 import com.yyh.web.board.BoardService;
@@ -31,7 +36,6 @@ public class BoardController {
 */
 	@Autowired
 	private BoardService boardService;
-	
 
 	@ModelAttribute("conditionMap") //RequestMapping 이전에 실행
 	public Map<String, String> searchConditionMap(){
@@ -54,35 +58,49 @@ public class BoardController {
 		}
 		List<BoardDTO> boardList = new ArrayList<BoardDTO>();
 		if (dto.getSearch_condition() == null) dto.setSearch_condition("title");
-		if (dto.getSearch_keyword() == null) dto.setSearch_keyword("");
-		if(!dto.getSearch_keyword().equals("")) {
-			 boardList = boardService.getBoardListSearch(dto);
-		}else {
-			boardList = boardService.getBoardList(dto);
-		}
+		if (dto.getSearch_keyword() == null) dto.setSearch_keyword("");;
+		boardList = boardService.getBoardList(dto);
 			
-		System.out.println(boardList);
+		//System.out.println(boardList);
 		model.addAttribute("boardList", boardList);
 		
 		return "boardList.jsp?pageNum="+pageNum;
 	}
 	
-	@RequestMapping(value = "/boardWrite.do" , method=RequestMethod.GET)
+	@GetMapping(value = "/boardWrite.do")
 	public String boardWrite(BoardDTO dto, BoardDAO boardDAO){
 		System.out.println("글쓰기 입장");
 		
 		return "boardWrite.jsp";
 	}
 
-	@RequestMapping(value = "/boardWrite.do", method=RequestMethod.POST)
-	public String boardWritedo(BoardDTO dto, BoardDAO boardDAO){
+	@PostMapping(value = "/boardWrite.do")
+	public String boardWritedo(BoardDTO dto, BoardDAO boardDAO) throws IllegalStateException, IOException{
 		System.out.println("글쓰기 처리");
-		boardDAO.insertBoard(dto);
+		
+		//파일업로드
+		MultipartFile uploadFile = dto.getUploadFile();
+		System.out.println(uploadFile);
+		if(!uploadFile.isEmpty()) {
+			String fileName  = uploadFile.getOriginalFilename();
+			uploadFile.transferTo(new File("c:/tmp/" + fileName));
+			dto.setUploadFileName(fileName);
+		}else {
+			dto.setUploadFileName("no");
+		}
+		
+		int ref = 0;
+		if(boardService.getBoardCount(dto) != 0) {
+			ref = boardService.getBoardMaxseq(dto)+1;
+		}
+		dto.setRef(ref);
+		System.out.println(dto);
+		boardService.insertBoard(dto);
 		
 		return "redirect:boardList.do";
 	}
 	
-	@RequestMapping(value = "/boardContent.do")
+	@GetMapping(value = "/boardContent.do")
 	public String boardContent(HttpServletRequest request, BoardDTO board, Model model) {
 		HttpSession session = request.getSession();
 		System.out.println("글 보기 ");
@@ -108,7 +126,7 @@ public class BoardController {
 		return "boardContent.jsp";
 	}
 
-	@RequestMapping(value = "/boardUpdate.do")
+	@PostMapping(value = "/boardUpdate.do")
 	public String boardUpdate(HttpServletRequest request, @ModelAttribute("board") BoardDTO board, Model model) {
 		//앞선 BoardDTO의 객체를 전부 받아옴
 		
@@ -128,7 +146,7 @@ public class BoardController {
 		return "redirect:boardList.do";
 	}
 	
-	@RequestMapping(value = "/boardDelete")
+	@PostMapping(value = "/boardDelete")
 	public String handleRequest(HttpServletRequest request, BoardDTO board, Model model) {
 		System.out.println("글 삭제 처리");
 		String pageNum = request.getParameter("pageNum");

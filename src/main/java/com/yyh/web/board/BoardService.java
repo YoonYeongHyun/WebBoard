@@ -11,7 +11,8 @@ public interface BoardService {
 	void deleteBoard(BoardDTO dto);
 
 	void updateBoardCnt(BoardDTO dto);
-	
 
+	public int getBoardMaxseq(BoardDTO board);
+	public int getBoardCount(BoardDTO board);
 	List<BoardDTO> getBoardListSearch(BoardDTO dto);
 }

@@ -12,16 +12,18 @@ import org.springframework.stereotype.Repository;
 
 import com.yyh.web.board.BoardDTO;
 
-@Repository("boardDAO")
+//@Repository("boardDAO")
 public class BoardDAOSpring2 {
 	
-	private final String BOARD_INSERT = "insert into board(seq, writer, title, content) values(board_seq.nextval, ?, ?, ?)";
+	private final String BOARD_INSERT = "insert into board(seq, writer, title, content, uploadFileName, ref, re_step, re_level) values(board_seq.nextval, ?, ?, ?, ?, ?, 0, 0)";
 	private final String BOARD_LIST = "select * from board order by	seq desc";
 	private final String BOARD_GET = "select * from board where seq = ?";
 	private final String BOARD_UPDATE = "update board set title = ?, content = ? where seq = ?";
 	private final String BOARD_UPDATE_CNT = "update board set readCount = readCount + 1 where seq = ?";
 	private final String BOARD_DELETE = "delete from board where seq = ?";
 
+	private final String BOARD_GET_MAXSEQ = "select max(seq) from board";
+	private final String BOARD_GET_COUNT = "select count(*) from board";
 	private final String BOARD_LIST_SEARCH = "select * from board where ? like '%'||?||'%' order by seq desc";
 	
 	@Autowired
@@ -29,7 +31,8 @@ public class BoardDAOSpring2 {
 	
 	public void insertBoard(BoardDTO board) {		
 		System.out.println("=>Spring JDBC2로 실행");
-		this.jdbcTemplate.update(BOARD_INSERT, board.getWriter(), board.getTitle(), board.getContent());
+		System.out.println("------------" + board + "------------------");
+		this.jdbcTemplate.update(BOARD_INSERT, board.getWriter(), board.getTitle(), board.getContent(), board.getUploadFileName(), board.getRef());
 	}
 
 	public List<BoardDTO> getBoardList(BoardDTO board) {
@@ -46,11 +49,14 @@ public class BoardDAOSpring2 {
 		return this.jdbcTemplate.query(BOARD_LIST_SEARCH, new BoardRowMapper(), board.getSearch_condition(), board.getSearch_keyword());
 	}
 	
+	public int getBoardMaxseq(BoardDTO board) {
+		System.out.println("=>Spring JDBC2로 실행");
+		return this.jdbcTemplate.queryForObject(BOARD_GET_MAXSEQ, Integer.class);
+	}
+	
 	public int getBoardCount(BoardDTO board) {
 		System.out.println("=>Spring JDBC2로 실행");
-		int cnt = 0;
-		return cnt;
-		
+		return this.jdbcTemplate.queryForObject(BOARD_GET_COUNT, Integer.class);
 	}
 	
 	public BoardDTO getBoard(BoardDTO board) {
@@ -88,6 +94,9 @@ public class BoardDAOSpring2 {
 			board.setContent(rs.getString("content"));
 			board.setRegDate(rs.getTimestamp("regDate"));
 			board.setReadCount(rs.getInt("readCount"));
+			board.setRef(rs.getInt("ref"));
+			board.setRe_step(rs.getInt("re_step"));
+			board.setRe_level(rs.getInt("re_level"));
 			return board;
 		}
 	}

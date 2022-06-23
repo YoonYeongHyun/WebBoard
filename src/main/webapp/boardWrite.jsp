@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function(){
 <div class="m_title"><a href="#">coder</a></div>
 <div class="s_title"><%=title %></div>
 <div id="container"> 
-	<form action="boardWrite.do" method="post" name="writeForm">
+	<form action="boardWrite.do" method="post" name="writeForm" enctype = "multipart/form-data">
 		<input type="hidden" name="seq" value="<%=seq %>">
 		<input type="hidden" name="ref" value="<%=ref %>">
 		<input type="hidden" name="re_step" value="<%=re_step %>">
@@ -84,9 +84,8 @@ document.addEventListener("DOMContentLoaded", function(){
 		
 			<input type="text" name="title" id="title" value="<%=re %>" placeholder="제목을 입력해 주세요.">
 			<textarea rows="20" cols="60" name="content" id="content" placeholder="내용을 입력하세요." style="resize: none;"></textarea> <br>
-			<input type="text" name="writer" id="writer" readonly value="<%=memberId%>"> <br>
-			 
-			<br>
+			<input type="text" name="writer" id="writer" readonly value="<%=memberId%>">
+			<input type="file" name="uploadFile">
 		<div class="btns">
 			<input type="button" value="글등록" id="btn_write">&emsp;&emsp;
 			<input type="button" value="취소" id="btn_boardList">	

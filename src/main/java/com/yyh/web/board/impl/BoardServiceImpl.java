@@ -13,7 +13,7 @@ import com.yyh.web.board.BoardService;
 public class BoardServiceImpl implements BoardService{
 
 	@Autowired
-	private BoardDAOSpring2 boardDAO;
+	private BoardDAOMybatis2 boardDAO;
 	
 	@Override
 	@Transactional("txManager")
@@ -49,8 +49,17 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public List<BoardDTO> getBoardListSearch(BoardDTO dto){
-		return getBoardListSearch(dto); 
+		return boardDAO.getBoardListSearch(dto); 
 	}
 
+	@Override
+	public int getBoardMaxseq(BoardDTO board) {
+		return boardDAO.getBoardMaxseq(board);
+	}
+
+	@Override
+	public int getBoardCount(BoardDTO board) {
+		return boardDAO.getBoardCount(board);
+	}
 
 }
