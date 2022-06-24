@@ -14,7 +14,7 @@ import com.yyh.web.board.BoardDTO;
 import com.yyh.web.common.JDBCUtil;
 import com.yyh.web.member.MemberDTO;
 
-@Repository("memberDAO")
+//@Repository("memberDAO")
 public class MemberDAOSpring2 {
 
 	private final String MEMBER_INSERT = "insert into member(id, password, name, email, tel, addrNum, addr1, addr2) "

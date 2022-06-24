@@ -70,10 +70,7 @@ xml 파일에 설정 사항을 계속 추가하게되면 문제점이 발생 -> 
  2. 어노테이션으로 설정하는 경우 : 자주 바뀔 가능성이 없는것 ex) tv
  -->
 <context:component-scan base-package="polymorphism"></context:component-scan>
-<bean class="polymorphism.AppleSpeaker"></bean>
-<!-- <bean class="polymorphism.SonySpeaker"></bean> --> 
- 
- 
+
  
  
  

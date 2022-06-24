@@ -11,7 +11,7 @@ import com.yyh.web.member.MemberService;
 public class MemberServiceImpl implements MemberService{
 	
 	@Autowired
-	private MemberDAOSpring2 memberDAO;
+	private MemberDAOMybatis2 memberDAO;
 	
 	@Override
 	public void insertMember(MemberDTO dto) {

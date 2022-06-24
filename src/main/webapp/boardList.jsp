@@ -70,7 +70,7 @@
 	<div id="container">
 		<div class="top_info">
 			<span class="s_id">
-				<a href="../member/memberInfoForm.jsp?pageNum=<%=pageNum%>"><%=memberId %></a>
+				<a href="/memberInfo.do"><%=memberId %></a>
 			</span>&emsp; 
 			<a href="logout.do">로그아웃</a>&emsp; 
 			<a href="boardWrite.do">글등록</a>

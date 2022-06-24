@@ -15,7 +15,7 @@ import com.yyh.web.member.MemberDTO;
 public class MemberDAO {
 
 	private final String MEMBER_INSERT = "insert into member values( ?, ?, ?)";
-	private final String MEMBER_UPDATE = "update member set name = ?, where id = ? and password = ?";
+	private final String MEMBER_UPDATE = "update member set name = ? where id = ? and password = ?";
 	private final String MEMBER_DELETE = "delete member where id = ? and password = ?";
 	private final String MEMBER_GET = "select * from member where id = ?";
 	

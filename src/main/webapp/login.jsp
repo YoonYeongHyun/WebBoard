@@ -101,7 +101,7 @@
 		<div class="f_a">
 			<a href="#">비밀번호 찾기</a>&emsp;|&emsp;
 			<a href="#">아이디 찾기</a>&emsp;|&emsp;
-			<a href="../member/memberJoinForm.jsp">회원가입</a> 
+			<a href="memberJoin.do">회원가입</a> 
 		</div>
 	</form>
 </div>
