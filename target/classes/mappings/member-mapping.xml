@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberDAO">
+
+	<insert id="MEMBER_INSERT">
+		insert into member(id, password, name, email, tel, addrNum, addr1, addr2)
+		values(#{id}, #{password}, #{name}, #{email}, #{tel}, #{addrNum}, #{addr1}, #{addr2})
+	</insert>
+	
+	<update id="MEMBER_UPDATE">
+		update member set name = #{name}, email = #{email}, tel = #{tel}, addrNum = #{addrNum}, addr1 = #{addr1}, addr2 = #{addr2} where id = #{id} and password = #{password}
+	</update>	
+	
+	<delete id="MEMBER_DELETE">
+		delete member where id = #{id} and password = #{password}
+	</delete>
+	
+	<select id="MEMBER_GET" resultType="member">
+		select * from member where id = #{id}
+	</select>
+	
+	<select id="MEMBER_LOGIN" resultType="int">
+		select count(*) from member where id = #{id} and password = #{password}
+	</select>
+	
+</mapper>
