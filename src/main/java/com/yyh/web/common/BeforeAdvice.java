@@ -16,7 +16,7 @@ public class BeforeAdvice {
 	@Pointcut("execution(* com.yyh.web..*Impl.get*(..))")	
 	public void getPointcut() {}
 	
-	@Before("allPointcut()")
+	//@Before("allPointcut()")
 	public void beforeLog(JoinPoint jp){
 		String method = jp.getSignature().getName(); //비즈니스 메서드 이름
 		Object[] args = jp.getArgs(); //비즈니스 메서드 매개변수 

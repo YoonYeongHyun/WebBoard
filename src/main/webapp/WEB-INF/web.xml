@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring/root-context.xml</param-value>
-  </context-param>
+<web-app 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+
   
-    
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
    <!-- Controller에서 사용할 서비스를 빈으로 등록하여 사용하기위한 설정 -->
   <context-param>
   	<param-name>contextConfigLocation</param-name>
   	<param-value>classpath:boardContext.xml</param-value>
   </context-param>
+  
+   <!-- xml파일을 web.xml에서 load되도록함 -->
   <listener>
-  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   
-
   <!-- 스프링에서 제공하는 DispatcherServlet -->
-  
   <servlet>
-    <description></description>
-    <servlet-name>action</servlet-name>
+    <servlet-name>board-servlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
     	<param-name>contextConfigLocation</param-name>
-    	<param-value>/WEB-INF/config/presentation-layer.xml</param-value>
+    	<param-value>/WEB-INF/config/board-servlet.xml</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
-    <servlet-name>action</servlet-name>
+    <servlet-name>board-servlet</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
-  
- 
-  
-  
-  
-  
   
   <!-- 한글 인코딩 설정 -->
   <filter>
@@ -52,7 +42,7 @@
   </filter>
   <filter-mapping>
   	<filter-name>characterEncoding</filter-name>
-  	<url-pattern>*.do</url-pattern>
+  	<url-pattern>/*</url-pattern>
   </filter-mapping>
   
   
@@ -60,15 +50,15 @@
   
   
   <!-- 생성한 DispatcherServlet 설정 -->
-<!--   <servlet>
-    <description></description>
-    <display-name>DispatcherServlet</display-name>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <servlet-class>com.yyh.web.view.controller.DispatcherServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <url-pattern>*.do</url-pattern>
-  </servlet-mapping>
+	<!--   
+	<servlet>
+    	<display-name>DispatcherServlet</display-name>
+    	<servlet-name>DispatcherServlet</servlet-name>
+    	<servlet-class>com.yyh.web.view.controller.DispatcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>DispatcherServlet</servlet-name>
+    	<url-pattern>/</url-pattern>
+	</servlet-mapping>
    -->
 </web-app>

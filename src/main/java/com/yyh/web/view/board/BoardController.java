@@ -60,18 +60,19 @@ public class BoardController {
 		if (dto.getSearch_condition() == null) dto.setSearch_condition("title");
 		if (dto.getSearch_keyword() == null) dto.setSearch_keyword("");;
 		boardList = boardService.getBoardList(dto);
-			
-		//System.out.println(boardList);
+		int count = boardService.getBoardCount(dto);
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("count", count);
 		
-		return "boardList.jsp?pageNum="+pageNum;
+		return "boardList";
 	}
 	
 	@GetMapping(value = "/boardWrite.do")
 	public String boardWrite(BoardDTO dto, BoardDAO boardDAO){
 		System.out.println("글쓰기 입장");
 		
-		return "boardWrite.jsp";
+		return "boardWrite";
 	}
 
 	@PostMapping(value = "/boardWrite.do")
@@ -123,7 +124,7 @@ public class BoardController {
 		model.addAttribute("board", board);
 		model.addAttribute("boardList_re", boardList_re);
 		
-		return "boardContent.jsp";
+		return "boardContent";
 	}
 
 	@PostMapping(value = "/boardUpdate.do")

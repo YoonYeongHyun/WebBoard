@@ -18,7 +18,7 @@ public class AfterReturingAdvice {
 	@Pointcut("execution(* com.yyh.web..*Impl.get*(..))")	
 	public void getPointcut() {}
 	
-	@AfterReturning(pointcut="getPointcut()", returning="returnObj")
+	//@AfterReturning(pointcut="getPointcut()", returning="returnObj")
 	public void afterLog(JoinPoint jp, Object returnObj){
 		String method = jp.getSignature().getName(); //비즈니스 메서드 이름
 		if(returnObj instanceof MemberDTO) {

@@ -54,7 +54,7 @@ public class BoardDAOMybatis2{
 
 	public void updateBoard(BoardDTO board) {
 		System.out.println("=>Spring Mybatis2로 실행");
-		mybatis.delete("BoardDAO.BOARD_DELETE", board);
+		mybatis.delete("BoardDAO.BOARD_UPDATE", board);
 	}
 
 	public void deleteBoard(BoardDTO board) {

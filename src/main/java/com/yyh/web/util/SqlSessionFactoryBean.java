@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
 public class SqlSessionFactoryBean {
-
+	/*
 	private static SqlSessionFactory sessionFactory = null;
 	
 	static {
@@ -31,4 +31,5 @@ public class SqlSessionFactoryBean {
 	public static SqlSession getSqlSessionInstance() {
 		return sessionFactory.openSession();
 	}
+	*/
 }

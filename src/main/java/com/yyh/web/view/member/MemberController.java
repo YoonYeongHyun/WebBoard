@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.yyh.web.member.MemberDTO;
 import com.yyh.web.member.MemberService;
@@ -21,25 +19,24 @@ public class MemberController{
 	private MemberService memberService;
 	
 	//로그인 폼으로 이동 - get방식
-	@GetMapping(value = "/login.do")
+	@GetMapping(value = "login.do")
 	public String loginGET() throws Exception{
 		System.out.println("로그인 이동");
-		return "redirect:login.jsp";
+		return "login";
 	}
 	
 	//로그인 처리 - post방식 
-	@PostMapping(value = "/login.do")
+	@PostMapping(value = "login.do")
 	public String handleRequest(HttpServletRequest request, MemberDTO dto) throws Exception{
 		System.out.println("로그인 처리");
 		int cnt = memberService.login(dto);
 		String id = dto.getId();
-		System.out.println(dto);
 		if(cnt == 1){
 			HttpSession session = request.getSession();
 			session.setAttribute("memberId", id);
-			return "redirect:boardList.do";
+			return "redirect:/boardList.do";
 		}else {
-			return "redirect:/login.do";
+			return "login";
 		}
 	}
 	
@@ -49,14 +46,14 @@ public class MemberController{
 		HttpSession session = request.getSession();
 		session.invalidate();
 	
-		return "login.jsp";
+		return "login";
 	}
 
 	//회원가입 입장 - get방식
 	@GetMapping(value = "/memberJoin.do")
 	public String memberJoinGET() throws Exception{
 		System.out.println("회원가입 이동");
-		return "redirect:memberJoin.jsp";
+		return "memberJoin";
 	}
 	
 	//회원가입 처리 - post방식 
@@ -64,7 +61,7 @@ public class MemberController{
 	public String memberJoinPOST(MemberDTO dto) throws Exception{
 		System.out.println("회원가입 처리");
 		memberService.insertMember(dto);
-		return "redirect:/login.jsp";
+		return "redirect:/login";
 	}
 	
 	//회원정보 확인 - get방식 
@@ -75,7 +72,7 @@ public class MemberController{
 		dto.setId((String) session.getAttribute("memberId"));
 		dto = memberService.getMember(dto);
 		model.addAttribute("member", dto);
-		return "memberInfo.jsp";
+		return "memberInfo";
 	}
 	
 	//회원정보 변경 - post방식 

@@ -69,7 +69,6 @@ xml 파일에 설정 사항을 계속 추가하게되면 문제점이 발생 -> 
  1. xml로 설정하는 경우 : 자주 바뀔 가능성이 있는 경우 ex) 스피커
  2. 어노테이션으로 설정하는 경우 : 자주 바뀔 가능성이 없는것 ex) tv
  -->
-<context:component-scan base-package="polymorphism"></context:component-scan>
 
  
  

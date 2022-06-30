@@ -8,69 +8,72 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-<context:component-scan base-package="com.yyh.web.view"/>
-<context:component-scan base-package="com.yyh.web"/>
-<!-- DBCP 설정 -->
-<context:property-placeholder location="classpath:config/database.properties"/>
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-	<property name="driverClassName" value="${jdbc.driver}"></property>
-	<property name="url" value="${jdbc.url}"></property>
-	<property name="username" value="${jdbc.username}"></property>
-	<property name="password" value="${jdbc.password}"></property>
-</bean>
 
-<!-- Spring JDBC 설정 -->
-<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-	<property name="dataSource" ref="dataSource"></property>
-</bean>
+	<context:component-scan base-package="com.yyh.web"/>
 
-<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-	<property name="dataSource" ref="dataSource"></property>
-	<property name="configLocation" value="classpath:sql-map-config.xml"></property>
-</bean>
-
-<bean class="org.mybatis.spring.SqlSessionTemplate">
-	<constructor-arg ref="sqlSession"></constructor-arg>
-</bean>
-
-<!-- Transaction 관리자 설정 --> 
-<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	<property name="dataSource" ref="dataSource"></property>
-</bean>
-
-<!--########## 1.트랜잭션 (annotation기반) #############-->
-<tx:annotation-driven transaction-manager="txManager"/>
-
-
-<!--########## 1.트랜잭션 (xml기반) #############-->
-<!-- Transaction Advice 설정 -->
-<!-- <tx:advice id="txAdvice" transaction-manager="txManager">
-	<tx:attributes>
-		<tx:method name="get*" read-only="true"/>get~ 메서드는 읽기 전용이므로 트랜젝션에서 제외
-		<tx:method name="*"/>나머지 메서드는 트랜젝션 대상 (insert, delete 등등)
-	</tx:attributes>
-</tx:advice>  -->
-
-<!-- Transaction AOP 설정 
-<aop:config>	get* 은 txAdvice 에서 이미 제외
-	<aop:pointcut expression="execution(* com.yyh.web..*Impl.*(..))" id="txPointcut"/>
-	<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
-</aop:config> -->
- 
-<!-- 1. AOP설정 (xml 기반) -->
-<!-- <bean id="aroundAdvice" class="com.yyh.web.common.AroundAdvice"></bean>
-<aop:config>
-	<aop:pointcut expression="execution(* com.yyh.web..*Impl.get*(..))" id="getPointcut"/>
-	<aop:pointcut expression="execution(* com.yyh.web..*Impl.*(..))" id="allPointcut"/>
-	<aop:aspect ref="aroundAdvice">
-		<aop:around pointcut-ref="allPointcut" method="aroundLog"/>
-	</aop:aspect>
-</aop:config>
- -->
-
-<!-- 2. AOP설정 (annotation 기반) -->
-
-<!-- <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
- -->
-
+	<context:property-placeholder location="classpath:config/database.properties"/>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>	
+		<property name="configLocation" value="classpath:sql-map-config.xml"/>
+	</bean>
+	
+	<bean  id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"/>
+	</bean>
+	
+	<!-- Transaction 관리자 설정 --> 
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!--########## 1.트랜잭션 (annotation기반) #############-->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	<!-- 2. AOP설정 (annotation 기반) -->
+	<aop:aspectj-autoproxy/>
+	
 </beans>
+
+	<!-- Spring JDBC 설정
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	 -->
+	 
+	 
+	<!--########## 1.트랜잭션 (xml기반) #############-->
+	<!-- Transaction Advice 설정 -->
+	<!-- <tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>get~ 메서드는 읽기 전용이므로 트랜젝션에서 제외
+			<tx:method name="*"/>나머지 메서드는 트랜젝션 대상 (insert, delete 등등)
+		</tx:attributes>
+	</tx:advice>  -->
+	
+	<!-- Transaction AOP 설정 
+	<aop:config>	get* 은 txAdvice 에서 이미 제외
+		<aop:pointcut expression="execution(* com.yyh.web..*Impl.*(..))" id="txPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config> -->
+	 
+
+	
+	<!-- 2. AOP설정 (xml 기반) 
+	<bean id="aroundAdvice" class="com.yyh.web.common.AroundAdvice"></bean>
+	<aop:config>
+		<aop:pointcut expression="execution(* com.yyh.web..*Impl.get*(..))" id="getPointcut"/>
+		<aop:pointcut expression="execution(* com.yyh.web..*Impl.*(..))" id="allPointcut"/>
+		<aop:aspect ref="aroundAdvice">
+			<aop:around pointcut-ref="allPointcut" method="aroundLog"/>
+		</aop:aspect>
+	</aop:config>-->
+	
+

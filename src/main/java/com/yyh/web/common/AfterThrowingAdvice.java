@@ -17,7 +17,7 @@ public class AfterThrowingAdvice {
 	@Pointcut("execution(* com.yyh.web..*Impl.get*(..))")	
 	public void getPointcut() {}
 	
-	@AfterThrowing(pointcut="allPointcut()", throwing="exceptObj")
+	//@AfterThrowing(pointcut="allPointcut()", throwing="exceptObj")
 	public void exceptionLog(JoinPoint jp, Exception exceptObj){
 		String method = jp.getSignature().getName(); //비즈니스 메서드 이름
 		

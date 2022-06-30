@@ -42,17 +42,6 @@
 	if (memberId == null) { //세션이 null인 경우
 		out.print("<script>alert('로그인 하세요');location='/login.jsp'</script>");
 	}
-	
-	//페이징(paging) 처리
-	int cnt=1;
-	int pageSize = 10;
-	String pageNum = request.getParameter("pageNum");
-	if (pageNum == null) pageNum = "1";
-
-	int currentPage = Integer.parseInt(pageNum);    //현재페이지
- 	int startRow = (currentPage -1) * pageSize + 1; //현재페이지의 첫행
-	int endRow = currentPage * pageSize;            //현재페이지의 마지막행
-	
 	//날짜형식 클래스
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 	SimpleDateFormat sdf_today = new SimpleDateFormat("hh:mm");
@@ -95,7 +84,7 @@
 						<tr>
 							<td style="text-align: right; margin-right: 20px">${board.seq}&ensp;&ensp;</td>
 							<td>
-								<a href="boardContent.do?seq=${board.seq}&pageNum=<%=pageNum%>">${board.title }</a>
+								<a href="boardContent.do?seq=${board.seq}&pageNum=${pageNum}">${board.title }</a>
 							</td>
 							<td style="text-align: center">${board.writer}</td>
 							<td style="text-align: center">${board.regDate}</td>
@@ -117,43 +106,64 @@
 			</form>
 		</div>
 		<div id="paging">
-		<%
-		
-		if(cnt > 0){
-			int pageCount =(cnt/pageSize) + (cnt%pageSize==0 ? 0 : 1);	
-			int pageBlock = 10;
-			
-			//시작페이지 설정
-			int startPage = 1;
-			if(currentPage % 10 != 0) startPage = (currentPage/10) * 10 +1;
-			else startPage = (currentPage/10 -1) * 10 +1;
-			
-			//끝페이지 설정
-			int endPage = startPage + pageBlock - 1;
-			if(endPage > pageCount) endPage = pageCount;
-			
-			//이전&첫 페이지
-			if(startPage > 10){%>
-				<a href='boardList.jsp?pageNum=<%=1 %>'><div id='p_box' class='p_box_b' title='첫 페이지'>≪</div></a>
-				<a href='boardList.jsp?pageNum=<%=startPage-10 %>'><div id='p_box' class='p_box_b'title='이전 페이지'>＜</div></a>
-			<%}
-			//페이징블럭처리
-			for (int i=startPage; i<=endPage; i++){
-				if(currentPage == i){
-					%><div id='p_box' class='p_box_c'><%=i %></div><%
-				} else{
-					%><a href='boardList.jsp?pageNum=<%=i %>'><div id='p_box'> <%=i %> </div></a><% 
-				}
-			}
-
-			//다음&마지막 페이지
-			if(endPage <= pageCount - (pageCount % pageSize)){%>
-				<a href='boardList.jsp?pageNum=<%=startPage+10%>'><div id='p_box' class='p_box_b' title='다음 페이지'>＞</div></a>
-				<a href='boardList.jsp?pageNum=<%=pageCount%>'><div id='p_box' class='p_box_b' title='끝 페이지'>≫</div></a>
-			<%}
-			//
-		}
-		%>
+			<c:set var="cnt" value="${count}" />
+			<c:set var="currentPage" value="${pageNum}" />
+			<c:set var="pageSize" value="10" />
+			<c:if test="${cnt > 0}">
+				<fmt:parseNumber var="cntPageSize" value="${cnt / pageSize}" integerOnly="true" />		
+						
+				<c:set var="pageCount" value="${(cntPageSize) + (cnt%pageSize==0 ? 0 : 1)}" />
+				<c:set var="pageBlock" value="10" />
+					
+				<c:set var="startPage" value="1" />
+				<c:choose>
+					<c:when test="${currentPage % 10 != 0}">
+						<fmt:parseNumber var="currentPage_stage" value="${currentPage/10}" integerOnly="true" />		
+						<c:set var="startPage" value="${currentPage_stage * 10 +1 }" />
+					</c:when>
+					<c:otherwise>
+						<fmt:parseNumber var="currentPage_stage" value="${currentPage/10}" integerOnly="true" />	
+						<c:set var="startPage" value="${(currentPage_stage -1) * 10 +1}" />
+					</c:otherwise>
+				</c:choose>
+				
+				<c:set var="endPage" value="${startPage + pageBlock-1}" />
+				<c:if test="${endPage > pageCount}">
+					<c:set var="endPage" value="${pageCount}"/>
+				</c:if>
+				<c:if test="${startPage > 10}">
+					<a href='productManagement?pageNum=1&category=${category}&search=${search}'>
+						<div id='p_box' class='p_box_b' title='첫 페이지'>≪</div>
+					</a>
+					<a href='productManagement?pageNum=${startPage-10}&category=${category}&search=${search}'>
+						<div id='p_box' class='p_box_b'title='이전 페이지'>＜</div>
+					</a>
+				</c:if>
+				<c:forEach begin="${startPage}" end="${endPage}" step="1" varStatus="status">
+					<c:choose>
+						<c:when test="${currentPage == status.count+currentPage_stage*10}">
+							<div id='p_box' class='p_box_c'>
+								<c:out value="${status.count+currentPage_stage*10}" />
+							</div>
+						</c:when>
+						<c:otherwise>
+							<a href='productManagement?pageNum=${status.count+currentPage_stage*10}&category=${category}&search=${search}'>
+								<div id='p_box'> 
+									<c:out value="${status.count+currentPage_stage*10}" />
+								</div>
+							</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<c:if test="${endPage <= pageCount - (pageCount % pageSize)}">
+					<a href='productManagement?pageNum=${startPage+10}&category=${category}&search=${search}'>
+						<div id='p_box' class='p_box_b' title='다음 페이지'>＞</div>
+					</a>
+					<a href='productManagement?pageNum=${pageCount}&category=${category}&search=${search}'>
+						<div id='p_box' class='p_box_b' title='끝 페이지'>≫</div>
+					</a>
+				</c:if>
+			</c:if>
 		</div>
 	</div>
 </body>

@@ -9,10 +9,9 @@
 	<configs>
 		<config>src/main/resources/applicationContext.xml</config>
 		<config>src/main/resources/boardContext.xml</config>
-		<config>src/main/webapp/WEB-INF/config/presentation-layer.xml</config>
+		<config>src/main/webapp/WEB-INF/config/board-servlet.xml</config>
 	</configs>
 	<autoconfigs>
-		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>
