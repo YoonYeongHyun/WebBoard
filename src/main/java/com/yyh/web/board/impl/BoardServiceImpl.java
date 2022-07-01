@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yyh.web.board.BoardDTO;
 import com.yyh.web.board.BoardService;
+import com.yyh.web.board.PagingDTO;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
@@ -60,6 +61,16 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int getBoardCount(BoardDTO board) {
 		return boardDAO.getBoardCount(board);
+	}
+
+	@Override
+	public int getPagingBoardCount(PagingDTO paging) {
+		return boardDAO.getPagingBoardCount(paging);
+	}
+
+	@Override
+	public List<BoardDTO> getPagingBoardList(PagingDTO paging) {
+		return boardDAO.getPagingBoardList(paging);
 	}
 
 }

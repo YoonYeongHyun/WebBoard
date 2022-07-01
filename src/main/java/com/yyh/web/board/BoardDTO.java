@@ -18,8 +18,6 @@ public class BoardDTO {
 	private int re_level;
 
 	//검색용
-	private String search_condition;
-	private String search_keyword;
 	
 	//파일 업로드용
 	private MultipartFile uploadFile;

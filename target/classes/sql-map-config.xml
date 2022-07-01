@@ -6,6 +6,7 @@
   	
   	<typeAliases>
   		<typeAlias  alias="board" type="com.yyh.web.board.BoardDTO"/>
+  		<typeAlias  alias="paging" type="com.yyh.web.board.PagingDTO"/>
   		<typeAlias  alias="member" type="com.yyh.web.member.MemberDTO"/>
   	</typeAliases>
   	<mappers>

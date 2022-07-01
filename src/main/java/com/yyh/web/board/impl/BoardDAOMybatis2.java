@@ -2,14 +2,12 @@ package com.yyh.web.board.impl;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.yyh.web.board.BoardDTO;
-import com.yyh.web.util.SqlSessionFactoryBean;
+import com.yyh.web.board.PagingDTO;
 
 @Repository("boardDAO")
 public class BoardDAOMybatis2{
@@ -60,6 +58,16 @@ public class BoardDAOMybatis2{
 	public void deleteBoard(BoardDTO board) {
 		System.out.println("=>Spring Mybatis2로 실행");
 		mybatis.delete("BoardDAO.BOARD_DELETE", board);
+	}
+	
+	public List<BoardDTO> getPagingBoardList(PagingDTO paging) {
+		System.out.println("=>Spring Mybatis2로 실행");
+		return mybatis.selectList("BoardDAO.BOARD_PAGING_LIST", paging);
+	}
+	
+	public int getPagingBoardCount(PagingDTO paging) {
+		System.out.println("=>Spring Mybatis2로 실행");
+		return mybatis.selectOne("BoardDAO.BOARD_GET_PAGING_COUNT", paging);
 	}
 	
 }

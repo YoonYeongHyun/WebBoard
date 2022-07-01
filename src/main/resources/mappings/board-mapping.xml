@@ -3,17 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BoardDAO">
-	<resultMap type="board" id="boardResult">
-		<result property="seq" column="seq"/>
-		<result property="title" column="title"/>
-		<result property="writer" column="writer"/>
-		<result property="content" column="content"/>
-	</resultMap>
+	
 
 	<insert id="BOARD_INSERT">
 		insert into board(seq, writer, title, content, uploadFileName, ref, re_step, re_level) 
 		values(board_seq.nextval, #{writer}, #{title}, #{content}, #{uploadFileName}, #{ref}, 0, 0)
 	</insert>
+
+	
 	<select id="BOARD_LIST" resultType="board">
 		select * from board where 1=1
 		<if test="search_condition == 'title'">
@@ -42,14 +39,39 @@
 	<select id="BOARD_GET_MAXSEQ" resultType="int">
 		select max(seq) from board
 	</select>
-	<select id="BOARD_GET_COUNT"  resultType="int">
-		select count(*) from board
-	</select>
-	<select id="BOARD_LIST_SEARCH"  resultType="board">
-		select * from board where like #{search_keyword} order by seq desc
-	</select>
 
+	<select id="BOARD_PAGING_LIST" resultType="board">
+		select * from 
+			(select rownum as num, origin.* from 
+				(select * from board where 1=1
+				<if test="search_condition == 'title'">
+				and title like '%'||#{search_keyword}||'%'
+				</if>
+				<if test="search_condition == 'content'">
+				and content like '%'||#{search_keyword}||'%'
+				</if>
+				<if test="search_condition == 'writer'">
+				and writer like '%'||#{search_keyword}||'%'
+				</if>
+				order by seq desc) origin
+			)
+		where num between #{start} and #{end} order by seq desc
+	</select>
+	<select id="BOARD_GET_PAGING_COUNT"  resultType="int">
+		select count(*) from board where 1=1
+		<if test="search_condition == 'title'">
+		and title like '%'||#{search_keyword}||'%'
+		</if>
+		<if test="search_condition == 'content'">
+		and content like '%'||#{search_keyword}||'%'
+		</if>
+		<if test="search_condition == 'writer'">
+		and writer like '%'||#{search_keyword}||'%'
+		</if>
+	</select>
 </mapper>
+
+
 <!-- 
 `	private final String BOARD_INSERT = "insert into board(seq, writer, title, content, uploadFileName, ref, re_step, re_level) values(board_seq.nextval, ?, ?, ?, ?, ?, 0, 0)";
 	private final String BOARD_LIST = "select * from board order by	seq desc";

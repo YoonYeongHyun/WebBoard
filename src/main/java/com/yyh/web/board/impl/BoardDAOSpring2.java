@@ -41,13 +41,13 @@ public class BoardDAOSpring2 {
 		System.out.println("=>Spring JDBC2로 실행");
 		return this.jdbcTemplate.query(BOARD_LIST, new BoardRowMapper());
 	}
-	
+	/*
 	public List<BoardDTO> getBoardListSearch(BoardDTO board) {
 		List<BoardDTO> boardList = new ArrayList<BoardDTO>();
 		board= null;
 		System.out.println("=>Spring JDBC2로 실행");
 		return this.jdbcTemplate.query(BOARD_LIST_SEARCH, new BoardRowMapper(), board.getSearch_condition(), board.getSearch_keyword());
-	}
+	}*/
 	
 	public int getBoardMaxseq(BoardDTO board) {
 		System.out.println("=>Spring JDBC2로 실행");

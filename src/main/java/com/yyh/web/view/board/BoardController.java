@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yyh.web.board.BoardDTO;
 import com.yyh.web.board.BoardService;
+import com.yyh.web.board.PagingDTO;
 import com.yyh.web.board.impl.BoardDAO;
 
 @Controller
@@ -40,31 +41,35 @@ public class BoardController {
 	@ModelAttribute("conditionMap") //RequestMapping 이전에 실행
 	public Map<String, String> searchConditionMap(){
 		Map<String, String> conditionMap = new HashMap<String, String>();
-		conditionMap.put("제목", "title");
 		conditionMap.put("내용", "content");
+		conditionMap.put("제목", "title");
 		conditionMap.put("작성자", "writer");
 		
 		return conditionMap;
 	}
 	
 	@RequestMapping(value = "/boardList.do")
-	public String boardList(HttpServletRequest request, BoardDTO dto, Model model) {
+	public String boardList(HttpServletRequest request,PagingDTO paging, BoardDTO dto, Model model,
+			@RequestParam(value="pageNum", required=false)String pageNum, @RequestParam(value="search_condition", required=false)String search_condition,
+			@RequestParam(value="search_keyword", required=false)String search_keyword) {
 		HttpSession session = request.getSession();
+		String memberId = (String) session.getAttribute("memberId");
 		System.out.println("글 목록 보기 ");
-		System.out.println(dto);
-		String pageNum = request.getParameter("pageNum");
-		if (pageNum == null || "null".equals(pageNum)){
-			pageNum = "1";
-		}
-		List<BoardDTO> boardList = new ArrayList<BoardDTO>();
-		if (dto.getSearch_condition() == null) dto.setSearch_condition("title");
-		if (dto.getSearch_keyword() == null) dto.setSearch_keyword("");;
-		boardList = boardService.getBoardList(dto);
-		int count = boardService.getBoardCount(dto);
-		model.addAttribute("boardList", boardList);
-		model.addAttribute("pageNum", pageNum);
-		model.addAttribute("count", count);
 		
+		List<BoardDTO> boardList = new ArrayList<BoardDTO>();
+		if (pageNum == null) pageNum = "1";
+		int count = boardService.getPagingBoardCount(paging);
+		paging = new PagingDTO(count, Integer.parseInt(pageNum), 10, search_condition, search_keyword);
+		if (paging.getSearch_condition() == null) paging.setSearch_condition("title");
+		if (paging.getSearch_keyword() == null) paging.setSearch_keyword("");
+		boardList = boardService.getPagingBoardList(paging);
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("paging", paging);
+		model.addAttribute("count", count);
+		model.addAttribute("memberId", memberId);
+		System.out.println(boardList);
+		System.out.println(paging);
+		System.out.println(count);
 		return "boardList";
 	}
 	

@@ -2,8 +2,8 @@
 <%@page import="java.util.List"%>
 <%@page import="com.yyh.web.board.impl.BoardDAO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,11 +36,6 @@
 </style>
 </head>
 <%
-	
-	String memberId = (String) session.getAttribute("memberId");
-	if (memberId == null) { //세션이 null인 경우
-		out.print("<script>alert('로그인 하세요');location='../logon/memberLoginForm.jsp'</script>");
-	}
 	//페이징(paging) 처리
 	int cnt=100;
 	int pageSize = 10;
@@ -67,7 +62,7 @@
 	<div id="container">
 		<div class="top_info">
 			<span class="s_id">
-				<a href="../member/memberInfoForm.jsp?pageNum=<%=pageNum%>"><%=memberId %></a>
+				<a href="../member/memberInfoForm.jsp?pageNum=<%=pageNum%>"> ${memberId} </a>
 			</span>&emsp; 
 			<a href="logout.jsp">로그아웃</a>&emsp; 
 			<a href="boardWriteForm.jsp?pageNum=<%=pageNum%>">글등록</a>
@@ -117,43 +112,26 @@
 			</form>
 		</div>
 		<div id="paging">
-		<%
-		
-		if(cnt > 0){
-			int pageCount =(cnt/pageSize) + (cnt%pageSize==0 ? 0 : 1);	
-			int pageBlock = 10;
-			
-			//시작페이지 설정
-			int startPage = 1;
-			if(currentPage % 10 != 0) startPage = (currentPage/10) * 10 +1;
-			else startPage = (currentPage/10 -1) * 10 +1;
-			
-			//끝페이지 설정
-			int endPage = startPage + pageBlock - 1;
-			if(endPage > pageCount) endPage = pageCount;
-			
-			//이전&첫 페이지
-			if(startPage > 10){%>
-				<a href='boardList.jsp?pageNum=<%=1 %>'><div id='p_box' class='p_box_b' title='첫 페이지'>≪</div></a>
-				<a href='boardList.jsp?pageNum=<%=startPage-10 %>'><div id='p_box' class='p_box_b'title='이전 페이지'>＜</div></a>
-			<%}
-			//페이징블럭처리
-			for (int i=startPage; i<=endPage; i++){
-				if(currentPage == i){
-					%><div id='p_box' class='p_box_c'><%=i %></div><%
-				} else{
-					%><a href='boardList.jsp?pageNum=<%=i %>'><div id='p_box'> <%=i %> </div></a><% 
-				}
-			}
-
-			//다음&마지막 페이지
-			if(endPage <= pageCount - (pageCount % pageSize)){%>
-				<a href='boardList.jsp?pageNum=<%=startPage+10%>'><div id='p_box' class='p_box_b' title='다음 페이지'>＞</div></a>
-				<a href='boardList.jsp?pageNum=<%=pageCount%>'><div id='p_box' class='p_box_b' title='끝 페이지'>≫</div></a>
-			<%}
-			//
-		}
-		%>
+		<c:if test="${count >0 }">
+			<c:if test="${paging.startPage > 10}">
+				<a href='boardList.do?pageNum=1'><div id='p_box' class='p_box_b' title='첫 페이지'>≪</div></a>
+				<a href='boardList.do?pageNum=${paging.startPage-1}'><div id='p_box' class='p_box_b'title='이전 페이지'>＜</div></a>
+			</c:if>
+			<c:forEach begin="${paging.startPage }" end="2" var="p">
+				<c:choose>
+					<c:when test="${p == paging.pageNum }">
+						<div id='p_box' class='p_box_c'>${p}</div>
+					</c:when>
+					<c:when test="${p != paging.pageNum }">
+						<a href='boardList.do?pageNum=${paging.pageNum}'><div id='p_box'>${p}</div></a>
+					</c:when>
+				</c:choose>
+			</c:forEach>
+			<c:if test="${paging.endPage <= paging.lastPage - (paging.lastPage % paging.pageScale) }">
+				<a href='boardList.jsp.do=${paging.startPage + 10}'><div id='p_box' class='p_box_b' title='다음 페이지'>＞</div></a>
+				<a href='boardList.jsp.do=${paging.lastPage}'><div id='p_box' class='p_box_b' title='끝 페이지'>≫</div></a>
+			</c:if>
+		</c:if>
 		</div>
 	</div>
 </body>
